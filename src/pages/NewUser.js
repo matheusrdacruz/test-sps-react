@@ -2,11 +2,13 @@ import { useNavigate } from "react-router-dom";
 import { Container, Box, TextField, MenuItem, Button, Typography } from "@mui/material";
 import { useState } from "react";
 import userService from "../services/UserService";
+import { useToast } from "../components/Toast";
 
 
 function NewUser() {
 
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const [user, setUser] = useState({name: "", email: "", type: "", password: ""});
   const [buttonDisabled, setButtonDisabled] = useState(false);
@@ -20,10 +22,11 @@ function NewUser() {
     try {
       setButtonDisabled(true);
       await userService.create(user).then(() => {
+        showToast("Usuário cadastrado com sucesso!", "success");
         navigate("/users");
-      }).catch((error) => {
-        console.log(error);
-        alert(error.error);
+      })
+      .catch((error) => {
+        showToast(error.error, "error");
       });
     } finally {
       setButtonDisabled(false);

@@ -1,12 +1,17 @@
-import axios from "axios";
+import api from "./api";
 
 class LoginService {
 
   async login(email, password) {
-    const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/auth/login`, { email, password });
-    return response.data;
+    try {
+      const response = await api.post(`/auth/login`, { email, password });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || {
+        message: "Erro ao comunicar com o servidor."
+      }
+    }
   }
-
 }
 
 const loginService = new LoginService();

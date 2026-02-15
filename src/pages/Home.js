@@ -1,6 +1,4 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Container, Box, Typography } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 
 function Home() {
   return (

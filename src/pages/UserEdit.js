@@ -1,20 +1,25 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { TextField } from "@mui/material";
 import { Container, Box, Typography, Button, MenuItem } from "@mui/material";
 import userService from "../services/UserService";
 import { useNavigate, useParams } from "react-router-dom";
+import { useToast } from "../components/Toast";
 
 function EditUser() {
 
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const [user, setUser] = useState({id: 0, name: "", email: "", type: "", password: ""});
   const [buttonDisabled, setButtonDisabled] = useState(false);
-  const {userId} =  useParams()
+  const { userId } =  useParams()
 
   useEffect(() => {
     userService.get(userId).then((user) => {
       setUser(user);
+    }).catch((error) => {
+      console.error(error);
+      showToast(error.error, "error");
     });
   }, [userId]);
 
@@ -23,10 +28,12 @@ function EditUser() {
       try {
         setButtonDisabled(true);
         await userService.update(user.id, user).then(() => {
+          showToast("Usuário atualizado com sucesso!", "success");
           navigate("/users");
         });
-      } catch (error) {
+      } catch (error) { 
         console.error(error);
+        showToast(error.error, "error");
       } finally {
         setButtonDisabled(false);
       }

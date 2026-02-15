@@ -2,10 +2,12 @@ import { useState } from "react";
 import { Container, Box, Typography, Button, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import loginService from "../services/LoginService";
+import { useToast } from "../components/Toast";
 
 function SignIn() {
 
-  const navigate = useNavigate();   
+  const navigate = useNavigate();
+  const { showToast } = useToast();   
 
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [buttonDisabled, setButtonDisabled] = useState(false);
@@ -23,11 +25,11 @@ function SignIn() {
         navigate("/");
       })
       .catch((error) => {
-        alert("Email ou senha inválidos");
+        showToast(error.error, "error");
       });
 
     } catch (error) {
-      console.error(error);
+      showToast(error.error, "error");
     } finally {
       setButtonDisabled(false);
     }

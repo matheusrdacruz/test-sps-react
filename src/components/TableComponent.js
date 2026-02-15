@@ -9,6 +9,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Button } from '@mui/material';
 
+//TODO: Melhoria implementar paginação
 export default function TableComponent({ columns, rows, editUser, deleteUser }) {
   return (
     <TableContainer component={Paper}>

@@ -9,19 +9,33 @@ import AddIcon from "@mui/icons-material/Add";
 import TableComponent from "../components/TableComponent";
 import { useNavigate } from "react-router-dom";
 import userService from "../services/UserService";
+import { useToast } from "../components/Toast";
 
+const columns = [
+  { field: "name", headerName: "Nome", flex: 1 },
+  { field: "email", headerName: "Email", flex: 1 },
+  { field: "type", headerName: "Tipo", flex: 1 },
+  { field: "edit", headerName: "Editar", flex: 1 },
+  { field: "delete", headerName: "Remover", flex: 1 },
+];
 
 const Users = () => {
 
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
 
     async function loadUsers() {
-      const users = await userService.list();
-      setUsers(users);
+      try {
+        //TODO: Melhoria implementar paginação
+        const users = await userService.list();
+        setUsers(users);
+      } catch (error) {
+        showToast(error.message, "error");
+      }
     }
 
     loadUsers();
@@ -38,20 +52,12 @@ const Users = () => {
         await userService.delete(id);
         setUsers(users.filter(u => u.id !== id));
       } catch (error) {
-        window.alert(error.message);
-        //console.error(error);
+        showToast(error.message, "error");
       }
     }
   }
 
-  const columns = [
-    { field: "name", headerName: "Nome", flex: 1 },
-    { field: "email", headerName: "Email", flex: 1 },
-    { field: "type", headerName: "Tipo", flex: 1 },
-    { field: "type", headerName: "Editar", flex: 1 },
-    { field: "type", headerName: "Remover", flex: 1 },
 
-  ];
 
   return (
     <Container maxWidth="lg">
