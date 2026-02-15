@@ -2,21 +2,50 @@ import axios from "axios";
 
 class UserService {
   async list() {
-    const users = await axios.get(`${process.env.REACT_APP_SERVER_URL}/users`);
-    return users;
+    const users = await axios.get(`${process.env.REACT_APP_SERVER_URL}/users`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    return users.data;
   }
+
   async get(id) {
-    throw new Error("Not implemented");
+    const user = await axios.get(`${process.env.REACT_APP_SERVER_URL}/users/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    return user.data;
   }
+
   async create(data) {
-    throw new Error("Not implemented");
+    await axios.post(`${process.env.REACT_APP_SERVER_URL}/users`, data, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
   }
+
   async delete(id) {
-    throw new Error("Not implemented");
+    await axios.delete(`${process.env.REACT_APP_SERVER_URL}/users/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
   }
+
   async update(id, data) {
-    throw new Error("Not implemented");
+    await axios.put(`${process.env.REACT_APP_SERVER_URL}/users/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
   }
 }
 
-export default UserService;
+const userService = new UserService();
+
+export default userService;

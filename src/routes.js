@@ -1,22 +1,46 @@
 import { createBrowserRouter } from "react-router-dom";
 
+import PrivateRoute from "./middleware/PrivateRoute";
+
 import Home from "./pages/Home";
 import Users from "./pages/Users";
-import UserEdit, { userLoader } from "./pages/UserEdit";
+import UserEdit from "./pages/UserEdit";
+import NewUser from "./pages/NewUser";
+import SignIn from "./pages/SignIn";
+import Navbar from "./components/Navbar";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <PrivateRoute>
+      <Navbar />
+      <Home />
+    </PrivateRoute>,
   },
   {
     path: "/users",
-    element: <Users />,
+    element: <PrivateRoute>
+      <Navbar />
+      <Users />
+    </PrivateRoute>,
   },
   {
     path: "/users/:userId",
-    element: <UserEdit />,
-    loader: userLoader,
+    element: <PrivateRoute>
+      <Navbar />
+      <UserEdit />
+    </PrivateRoute>,
+  },
+  {
+    path: "/users/new",
+    element: <PrivateRoute>
+      <Navbar />
+      <NewUser />
+    </PrivateRoute>,
+  },
+  {
+    path: "/login",
+    element: <SignIn />,
   },
 ]);
 

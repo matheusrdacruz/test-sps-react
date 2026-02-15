@@ -1,12 +1,14 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { Container, Box, Typography } from "@mui/material";
 
 function Home() {
   return (
-    <div>
-      <h1>SPS REACT TEST</h1>
-
-      <a href="/users">Usuários</a>
-    </div>
+    <Container maxWidth="sm">
+      <Typography variant="h5" align="center" component="h1">
+        Bem-vindo ao Test SPS
+      </Typography>
+    </Container>
   );
 }
 

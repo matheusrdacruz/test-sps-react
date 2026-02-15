@@ -1,40 +1,34 @@
-import React, { useEffect, useState } from "react";
-import { TextField } from "@mui/material";
-import { Container, Box, Typography, Button, MenuItem } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { Container, Box, TextField, MenuItem, Button, Typography } from "@mui/material";
+import { useState } from "react";
 import userService from "../services/UserService";
-import { useNavigate, useParams } from "react-router-dom";
 
-function EditUser() {
+
+function NewUser() {
 
   const navigate = useNavigate();
 
-  const [user, setUser] = useState({id: 0, name: "", email: "", type: "", password: ""});
+  const [user, setUser] = useState({name: "", email: "", type: "", password: ""});
   const [buttonDisabled, setButtonDisabled] = useState(false);
-  const {userId} =  useParams()
 
-  useEffect(() => {
-    userService.get(userId).then((user) => {
-      setUser(user);
-    });
-  }, [userId]);
+  const handleChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
 
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      try {
-        setButtonDisabled(true);
-        await userService.update(user.id, user).then(() => {
-          navigate("/users");
-        });
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setButtonDisabled(false);
-      }
-    };
-
-    const handleChange = (e) => {
-      setUser({ ...user, [e.target.name]: e.target.value });
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setButtonDisabled(true);
+      await userService.create(user).then(() => {
+        navigate("/users");
+      }).catch((error) => {
+        console.log(error);
+        alert(error.error);
+      });
+    } finally {
+      setButtonDisabled(false);
+    }
+  };
 
   return (
     <Container maxWidth="md">
@@ -49,7 +43,7 @@ function EditUser() {
         }}
       >
         <Typography variant="h5" component="h1">
-          Editar Usuário
+          Cadastro de Usuário
         </Typography>
 
         <TextField
@@ -84,6 +78,16 @@ function EditUser() {
           required
         />
 
+        <TextField
+          label="Password"
+          name="password"
+          type="password"
+          value={user.password}
+          onChange={handleChange}
+          fullWidth
+          required
+        />
+
         <Box sx={{ display: "flex", padding: "16px", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
           <Button
             disabled={buttonDisabled}
@@ -110,4 +114,4 @@ function EditUser() {
   );
 }
 
-export default EditUser;
+export default NewUser;
