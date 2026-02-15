@@ -13,5 +13,7 @@
 # Como rodar
 
 cd test-sps-react
+
 npm install
+
 npm run dev
